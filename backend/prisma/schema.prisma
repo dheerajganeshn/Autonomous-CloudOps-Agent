@@ -1,0 +1,50 @@
+//👉 In short: We use this to define our application’s database schema, relationships, and defaults in one place, so Prisma can generate a safe and easy-to-use client for interacting with the database.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Incident {
+  id          String             @id @default(cuid())
+  createdAt   DateTime           @default(now())
+  status      String             @default("open")
+  severity    String             @default("medium")
+  title       String
+  description String
+  alerts      Alert[]
+  suggestions ActionSuggestion[]
+}
+
+model Alert {
+  id         String    @id @default(cuid())
+  source     String
+  message    String
+  severity   String
+  ts         DateTime  @default(now())
+  incident   Incident? @relation(fields: [incidentId], references: [id])
+  incidentId String?
+}
+
+model ActionSuggestion {
+  id          String     @id @default(cuid())
+  incident    Incident   @relation(fields: [incidentId], references: [id])
+  incidentId  String
+  actionType  String
+  description String
+  confidence  Float      @default(0.5)
+  feedback    Feedback[]
+}
+
+model Feedback {
+  id           String           @id @default(cuid())
+  suggestion   ActionSuggestion @relation(fields: [suggestionId], references: [id])
+  suggestionId String
+  value        Int
+  comment      String?
+  createdAt    DateTime         @default(now())
+}
