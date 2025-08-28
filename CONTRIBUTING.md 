@@ -1,0 +1,11 @@
+# Contributing to Autonomous CloudOps Agent
+
+Thanks for your interest! Here’s how to get started.
+
+## Getting Started (Backend)
+```bash
+cd backend
+npm install
+npx prisma generate
+npx prisma migrate dev --name init
+npm run dev
