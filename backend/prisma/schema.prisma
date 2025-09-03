@@ -1,5 +1,8 @@
 //👉 In short: We use this to define our application’s database schema, relationships, and defaults in one place, so Prisma can generate a safe and easy-to-use client for interacting with the database.
-
+//npx prisma format
+npx prisma validate
+npx prisma generate
+npx prisma migrate dev --name init
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,14 +13,14 @@ datasource db {
 }
 
 model Incident {
-  id          String             @id @default(cuid())
-  createdAt   DateTime           @default(now())
-  status      String             @default("open")
-  severity    String             @default("medium")
-  title       String
-  description String
-  alerts      Alert[]
-  suggestions ActionSuggestion[]
+  id           String            @id @default(cuid())
+  createdAt    DateTime          @default(now())
+  status       String            @default("open")
+  severity     String            @default("medium")
+  title        String
+  description  String
+  alerts       Alert[]
+  suggestions  ActionSuggestion[]
 }
 
 model Alert {
@@ -41,10 +44,10 @@ model ActionSuggestion {
 }
 
 model Feedback {
-  id           String           @id @default(cuid())
-  suggestion   ActionSuggestion @relation(fields: [suggestionId], references: [id])
-  suggestionId String
-  value        Int
-  comment      String?
-  createdAt    DateTime         @default(now())
+  id            String   @id @default(cuid())
+  suggestion    ActionSuggestion @relation(fields: [suggestionId], references: [id])
+  suggestionId  String
+  value         Int
+  comment       String?
+  createdAt     DateTime @default(now())
 }
